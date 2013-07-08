@@ -1,0 +1,11 @@
+1 1 1 1 1
+1 0 0 0 1
+1 0 1 0 1
+1 0 0 0 1
+1 1 1 1 1
+
+This program displays a Fractal. They can be quite beautiful, and you can clearly see the full image nested inside of the image multiple times. The drawing is based upon the following algorithm:
+
+Read from the Matrix above. If there's a one, zoom in to the corresponding square of the image. Then repeat, until the 4th time in which you draw a white square instead.
+
+You can modify the Matrix above in order to change what the Fractal looks like. Make sure you press [Control] + [S] to save every time you want to see the updated Fractal!

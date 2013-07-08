@@ -1,0 +1,2893 @@
+// First drawing
+#include <windows.h> // these two header files are needed to compile a program in OpenGL with GLUT
+#include <GL/glut.h>
+
+void display ()
+{
+	GLfloat x = 50.0; // this is a variable which can be used in drawing commands
+glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (1.0, 0.5, 1.0); // sets color for drawing operations to white
+	glBegin (GL_POLYGON); // the next commands will draw lines
+		glVertex3f (-50.0, 75.0 , 0.0);
+		glVertex3f (-20.0, 25.0 , 0.0);
+		glVertex3f (-25.0, -75.0, 0.0);
+		glVertex3f (-75.0, -75.0, 0.0);
+		glVertex3f (-80.0, 25.0 , 0.0);
+	glEnd (); // ends coding of points
+	glBegin(GL_LINE_LOOP);
+        glVertex3f(25, 50, 0.0);
+        glVertex3f(75, 50, 0.0);
+        glVertex3f(50, -50, 0.0);
+    glEnd();
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void init ()
+{
+	glClearColor (0.0, 0.0, 0.0, 0.0); // sets background color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("My first OpenGL program - THE SQUARE"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ----------------------------------
+// Your own quadrilateral!
+#include <windows.h> // these two header files are needed to compile a program in OpenGL with GLUT
+#include <GL/glut.h>
+#include <iostream>
+
+GLfloat vertices[8];
+
+void display ()
+{
+	GLfloat x = 50.0; // this is a variable which can be used in drawing commands
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (1.0, 0.5, 1.0); // sets color for drawing operations to white
+	glBegin (GL_POLYGON); // the next commands will draw lines
+		for (int i=0; i<7; i+=2) {
+            glVertex3f(vertices[i], vertices[i + 1], 0.0);
+		}
+	glEnd (); // ends coding of points
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void init ()
+{
+	glClearColor (0.0, 0.0, 0.0, 0.0); // sets background color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+}
+
+void askForVertices()
+{
+    for (int i=0; i<8; i++) {
+        char xy[] = {'X', 'Y'};
+        std::cout << xy[(int)(i % 2 != 0)] << " value of next vertex? ";
+        std::cin >> vertices[i];
+    }
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("My first OpenGL program - THE SQUARE"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	askForVertices();
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// -------------------------
+// And now an easier one
+#include <windows.h> // these two header files are needed to compile a program in OpenGL with GLUT
+#include <GL/glut.h>
+#include <iostream>
+
+GLfloat vertices[8];
+
+void display ()
+{
+	GLfloat x = 50.0; // this is a variable which can be used in drawing commands
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (1.0, 0.5, 1.0); // sets color for drawing operations to white
+	glBegin (GL_POLYGON); // the next commands will draw lines
+		for (int i=0; i<7; i+=2) {
+            glVertex3f(vertices[i], vertices[i + 1], 0.0);
+            std::cout << vertices[i] << vertices[i + 1] << std::endl;
+		}
+	glEnd (); // ends coding of points
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void init ()
+{
+	glClearColor (0.0, 0.0, 0.0, 0.0); // sets background color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+}
+
+void processInput()
+{
+
+    GLfloat X;
+    GLfloat Y;
+    GLfloat sideLength;
+    std::cout << "Hello there! How are you today? Just kidding. Now, where should the center of that square of yours be?\nX: ";
+    std::cin >> X;
+    std::cout << "Y: ";
+    std::cin >> Y;
+    std::cout << "And how big? What's the length of one side? ";
+    std::cin >> sideLength;
+
+    GLfloat halfLength = sideLength / 2.0f;
+    int pn[] = {1, -1};
+    for (int d=0; d<7; d+=2) {
+        int i = d / 2;
+        vertices[d] = X + halfLength * pn[i == 0 || i == 3];
+        vertices[d+1] = Y + halfLength * pn[i == 2 || i == 3];
+    }
+
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("My first OpenGL program - THE SQUARE"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	processInput();
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ----------------
+// One attempt at doing that with Hexagons...
+#include <windows.h> // these two header files are needed to compile a program in OpenGL with GLUT
+#include <GL/glut.h>
+#include <iostream>
+#include <math.h>
+
+GLfloat vertices[12];
+
+void display ()
+{
+	GLfloat x = 50.0; // this is a variable which can be used in drawing commands
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (1.0, 0.5, 1.0); // sets color for drawing operations to white
+	glBegin (GL_POLYGON); // the next commands will draw lines
+		for (int i=0; i<11; i+=2) {
+            glVertex3f(vertices[i], vertices[i + 1], 0.0);
+            std::cout << vertices[i] << "," << vertices[i + 1] << std::endl;
+		}
+	glEnd (); // ends coding of points
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void init ()
+{
+	glClearColor (0.0, 0.0, 0.0, 0.0); // sets background color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+}
+
+void processInput()
+{
+
+    GLfloat X;
+    GLfloat Y;
+    GLfloat sideWidth;
+    std::cout << "Hello there! How are you today? Just kidding. Now, where should the center of that hexagon of yours be?\nX: ";
+    std::cin >> X;
+    std::cout << "Y: ";
+    std::cin >> Y;
+    std::cout << "And how big? What's the length of one side? ";
+    std::cin >> sideWidth;
+
+    GLfloat diagWidth = sideWidth / sqrt(2);
+    GLfloat hexWidth = diagWidth * 2 + sideWidth;
+    GLfloat halfHexWidth = hexWidth / 2;
+    GLfloat halfSideWidth = sideWidth / 2;
+/*  01__01
+     /  \
+    /    \23
+  89\    /
+     \  /
+    67--45*/
+    vertices[0]  = X + halfSideWidth;
+    vertices[1]  = Y + halfHexWidth;
+    vertices[2]  = X + halfHexWidth;
+    vertices[3]  = Y;
+    vertices[4]  = X + halfSideWidth;
+    vertices[5]  = Y - halfHexWidth;
+    vertices[6]  = X - halfSideWidth;
+    vertices[7]  = Y - halfHexWidth;
+    vertices[8]  = X - halfHexWidth;
+    vertices[9]  = Y;
+    vertices[10] = X - halfSideWidth;
+    vertices[11] = Y + halfHexWidth;
+
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("My first OpenGL program - THE SQUARE"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	processInput();
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ---------------
+// And one that works
+//#include <windows.h> // these two header files are needed to compile a program in OpenGL with GLUT
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+
+GLfloat vertices[12];
+
+void display ()
+{
+	GLfloat x = 50.0; // this is a variable which can be used in drawing commands
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (0.1, 0.0, 0.3); // sets color for drawing operations to white
+	glBegin(GL_POLYGON);
+		glVertex3f(-1.0, -1.0, 0.0);
+		glVertex3f( 1.0, -1.0, 0.0);
+		glVertex3f( 0.0,  1.0, 0.0);
+	glEnd();
+	glBegin (GL_LINE_LOOP); // the next commands will draw lines
+		for (int i=0; i<11; i+=2) {
+            glVertex3f(vertices[i], vertices[i + 1], 0.0);
+            std::cout << vertices[i] << "," << vertices[i + 1] << std::endl;
+		}
+	glEnd (); // ends coding of points
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void init ()
+{
+	glClearColor (0.7, 0.7, 1.0, 0.0); // sets background color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+}
+
+void processInput()
+{
+
+    GLfloat X;
+    GLfloat Y;
+    GLfloat sideWidth;
+    std::cout << "Hello there! How are you today? Just kidding. Now, where should the center of that hexagon of yours be?\nX: ";
+    std::cin >> X;
+    std::cout << "Y: ";
+    std::cin >> Y;
+    std::cout << "And how big? What's the length of one side? ";
+    std::cin >> sideWidth;
+
+    for (int i=0; i<11; i+=2)   {
+        int h = i / 2;
+        int deg = h * 60;
+        std::cout << deg << std::endl;
+        vertices[i] = sin((GLfloat)deg / (180.0 / M_PI)) * sideWidth;
+        vertices[i + 1] = cos((GLfloat)deg / (180.0 / M_PI)) * sideWidth;
+    }
+
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	processInput();
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// -------------------------
+// Now with brilliant scrolling colors!
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+
+GLfloat vertices[12];
+GLfloat color[3] = {1.0, 1.0, 1.0};
+int colorIndex = 0;
+GLfloat speed = -0.01;
+
+void display ()
+{
+	GLfloat x = 50.0; // this is a variable which can be used in drawing commands
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (color[0], color[1], color[2]); // sets color for drawing operations to white
+	glBegin (GL_POLYGON); // the next commands will draw lines
+		for (int i=0; i<11; i+=2) {
+			glVertex3f(vertices[i], vertices[i + 1], 0.0);
+		}
+	glEnd (); // ends coding of points
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void init ()
+{
+	glClearColor (0.7, 0.7, 1.0, 0.0); // sets background color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+}
+
+void processInput()
+{
+
+    GLfloat X;
+    GLfloat Y;
+    GLfloat sideWidth;
+    std::cout << "Hello there! How are you today? Just kidding. Now, where should the center of that hexagon of yours be?\nX: ";
+    std::cin >> X;
+    std::cout << "Y: ";
+    std::cin >> Y;
+    std::cout << "And how big? What's the length of one side? ";
+    std::cin >> sideWidth;
+
+    for (int i=0; i<11; i+=2)   {
+        int h = i / 2;
+        int deg = h * 60;
+        std::cout << deg << std::endl;
+        vertices[i] = sin((GLfloat)deg / (180.0 / M_PI)) * sideWidth;
+        vertices[i + 1] = cos((GLfloat)deg / (180.0 / M_PI)) * sideWidth;
+    }
+
+}
+
+void update(int number)	{
+	color[colorIndex] += speed;
+	if ((color[colorIndex] < 0.001 && speed < 0) || (color[colorIndex] > 0.999 && speed > 0))	colorIndex += 1;
+	if (colorIndex > 2)	{
+		colorIndex = 0;
+		speed = -1 * speed;
+	}
+	glutPostRedisplay();
+	glutTimerFunc(20, update, 0);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	glutTimerFunc(1000, update, 0);
+	processInput();
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ----------------------
+// And I believe the answer is 4.
+#include "windows.h"
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "time.h"
+
+GLfloat * vertices = new GLfloat;
+int numVertices = 0;
+
+void display ()
+{
+	GLfloat x = 50.0; // this is a variable which can be used in drawing commands
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glBegin (GL_LINES); // the next commands will draw lines
+		for (int i=0; i<numVertices - 1; i+=2) {
+			for (int b=0; b<numVertices - 1; b+=2)	{
+				if (i != b)	{
+					int red = rand() % 2;
+					glColor3f(red, 0.0, !red);
+					glVertex3f(vertices[i], vertices[i + 1], 0.0);
+					glVertex3f(vertices[b], vertices[b + 1], 0.0);
+				}
+			}
+		}
+	glEnd (); // ends coding of points
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void init ()
+{
+	glClearColor (0.7, 0.7, 1.0, 0.0); // sets background color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	srand(time(0));
+}
+
+void update(int frame)
+{
+	numVertices = (rand() % 5 + 3) * 2;
+	for (int i=0; i<numVertices; i++)	{
+		vertices[i] = rand() % 200 - 100;
+	}
+	std::cout << numVertices / 2 << std::endl;
+	glutPostRedisplay();
+	glutTimerFunc(10000, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	update(0);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ---------------------------
+// A color class! Here's color.h:
+#pragma once
+#include <string>
+#include "math.h"
+#include "stdlib.h"
+
+class color	{
+public:
+	color();
+	color(float red, float green, float blue);
+	color(float _color[]);
+	color(const color& _color);
+	void operator=(float _color[]);
+	void operator=(color _color);
+	color operator+(float _color[]);
+	color operator+(color _color);
+	float operator[](int index);
+	void setColor(float red, float green, float blue);
+	void setColor(float _color[]);
+	void setColor(color _color);
+	void randomColor();
+	void killRed();
+	void killGreen();
+	void killBlue();
+	void addToColor(float red, float green, float blue);
+	void addToColor(float _color[]);
+	void addToColor(color _color);
+	std::string colorValues();
+	void insertColorValues(float (* _color)[3]);
+	bool isBlack();
+	bool isWhite();
+	bool isGrey();
+private:
+	float Color[3];
+	float TRESHHOLD;
+};
+// ---------------
+// And here's color.cpp:
+#include "color.h"
+#define THRESHHOLD 0.01
+
+color::color()	{
+	setColor(0.0, 0.0, 0.0);
+}
+
+color::color(float red, float green, float blue)	{
+	setColor(red, green, blue);
+}
+
+color::color(float _color[])	{
+	setColor(_color);
+}
+
+color::color(const color& _color)	{
+	setColor(_color);
+}
+
+void color::operator=(float _color[])	{
+	setColor(_color);
+}
+
+void color::operator=(color _color)	{
+	setColor(_color);
+}
+
+color color::operator+(float _color[])	{
+	return color(Color[0] + _color[0], Color[1] + _color[1], Color[2] + _color[2]); 
+}
+
+color color::operator+(color _color)	{
+	return color(Color[0] + _color[0], Color[1] + _color[1], Color[2] + _color[2]);
+}
+
+float color::operator[](int index)	{
+	return Color[index];
+}
+
+void color::setColor(float red, float green, float blue)	{
+	Color[0] = red;
+	Color[1] = green;
+	Color[2] = blue;
+}
+
+void color::setColor(float _color[])	{
+	Color[0] = _color[0];
+	Color[1] = _color[1];
+	Color[2] = _color[2];
+}
+
+void color::setColor(color _color)	{
+	_color.insertColorValues(&Color);
+}
+
+void color::randomColor()	{
+	setColor((float)(rand() % 101) / 101.0, (float)(rand() % 101) / 101.0, (float)(rand() % 101) / 101.0);
+}
+
+void color::killRed()	{
+	Color[0] = 0.0;
+}
+
+void color::killGreen()	{
+	Color[1] = 0.0;
+}
+
+void color::killBlue()	{
+	Color[2] = 0.0;
+}
+
+void color::addToColor(float red, float green, float blue)	{
+	setColor(Color[0] + red, Color[1] + green, Color[2] + blue);
+}
+
+void color::addToColor(float _color[])	{
+	setColor(Color[0] + _color[0], Color[1] + _color[1], Color[2] + _color[2]);
+}
+
+void color::addToColor(color _color)	{
+	setColor(Color[0] + _color[0], Color[1] + _color[1], Color[2] + _color[2]);
+}
+
+std::string color::colorValues()	{
+	return std::to_string(Color[0]) + "," + std::to_string(Color[1]) + "," + std::to_string(Color[2]);
+}
+
+void color::insertColorValues(float (* _color)[3])	{
+	*_color[0] = Color[0];
+	*_color[1] = Color[1];
+	*_color[2] = Color[2];
+}
+
+bool color::isBlack()	{
+	return (isGrey() && Color[0] < THRESHHOLD);
+}
+
+bool color::isWhite()	{
+	return (isGrey() && Color[0] > 1 - THRESHHOLD);
+}
+
+bool color::isGrey()	{
+	return ((abs(Color[0] - Color[1]) < THRESHHOLD) && (abs(Color[1] - Color[2]) < THRESHHOLD));
+}
+// ------------------
+// And here's a testing main.cpp
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+
+GLfloat vertices[12];
+color Color(0.0, 0.0, 0.0);
+int colorIndex = 0;
+GLfloat speed = -0.01;
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (Color[0], Color[1], Color[2]); // sets Color for drawing operations to white
+	glBegin (GL_POLYGON); // the next commands will draw lines
+		for (int i=0; i<11; i+=2) {
+			glVertex3f(vertices[i], vertices[i + 1], 0.0);
+		}
+	glEnd (); // ends coding of points
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void init ()
+{
+	glClearColor (0.7, 0.7, 1.0, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+}
+
+void processInput()
+{
+
+    GLfloat X;
+    GLfloat Y;
+    GLfloat sideWidth;
+    std::cout << "Hello there! How are you today? Just kidding. Now, where should the center of that hexagon of yours be?\nX: ";
+    std::cin >> X;
+    std::cout << "Y: ";
+    std::cin >> Y;
+    std::cout << "And how big? What's the length of one side? ";
+    std::cin >> sideWidth;
+
+    for (int i=0; i<11; i+=2)   {
+        int h = i / 2;
+        int deg = h * 60;
+        std::cout << deg << std::endl;
+        vertices[i] = sin((GLfloat)deg / (180.0 / M_PI)) * sideWidth;
+        vertices[i + 1] = cos((GLfloat)deg / (180.0 / M_PI)) * sideWidth;
+    }
+
+}
+
+void update(int number)	{
+	Color.addToColor(speed, colorIndex);
+	if ((Color[colorIndex] < 0.001 && speed < 0) || (Color[colorIndex] > 0.999 && speed > 0))	colorIndex += 1;
+	if (colorIndex > 2)	{
+		colorIndex = 0;
+		speed = -1 * speed;
+		Color.killRed();
+		Color.killGreen();
+		Color.killBlue();
+	}
+	if (Color.isGrey())	Color.randomColor();
+	glutPostRedisplay();
+	glutTimerFunc(20, update, 0);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	glutTimerFunc(1000, update, 0);
+	processInput();
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ----------------------
+// And, still with scrolling colors, any regular shape you want! Ever! Even a circle! Kind of.
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+
+color Color(1.0, 1.0, 1.0);
+int colorIndex;
+GLfloat speed;
+
+void init ()
+{
+	glClearColor (0.7, 0.7, 1.0, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	colorIndex = 0;
+	speed = -0.01;
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0)	{
+	int angleEach = (360 / sides);
+	GLfloat halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	GLfloat hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			GLfloat deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (Color[0], Color[1], Color[2]); // sets Color for drawing operations to white
+	perfect(0.0, 0.0, 11, 50.0);
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void update(int frame)	{
+	Color.addToColor(speed, colorIndex);
+	if ((Color[colorIndex] < 0.001 && speed < 0) || (Color[colorIndex] > 0.999 && speed > 0))	colorIndex += 1;
+	if (colorIndex > 2)	{
+		colorIndex = 0;
+		speed = -1 * speed;
+		Color.randomColor();
+	}
+	glutPostRedisplay();
+	glutTimerFunc(20, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	update(0);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// -----------------------
+// Here's a wonderful memory allocation monster. Well, it draws lots of stars.
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+color Color(1.0, 1.0, 1.0);
+int colorIndex;
+GLfloat speed;
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0);
+
+class star	{
+public:
+	star()	{
+		Color = color();
+		X = 0.0;
+		Y = 0.0;
+		Size = 0.0;
+	}
+	star(color& _Color, GLfloat _X, GLfloat _Y, GLfloat _Size)	{
+		Color.setColor(_Color[0], _Color[1], _Color[2]);
+		X = _X;
+		Y = _Y;
+		Size = _Size;
+	}
+	void Draw()	{
+		glColor3f(Color[0], Color[1], Color[2]);
+		perfect(X, Y, 4, Size);
+		perfect(X, Y, 4, Size, 45);
+	}
+	color Color;
+	GLfloat X;
+	GLfloat Y;
+	GLfloat Size;
+};
+
+star * stars = new star[30];
+int numStars = 0;
+int maxStars = 30;
+
+void init ()
+{
+	glClearColor (0.7, 0.7, 1.0, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	colorIndex = 0;
+	speed = -0.01;
+	srand(time(0));
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0)	{
+	int angleEach = (360 / sides);
+	GLfloat halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	GLfloat hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			GLfloat deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (Color[0], Color[1], Color[2]); // sets Color for drawing operations to white
+	for (int i=0; i<numStars; i++)	{
+		stars[i].Draw();
+	}
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void update(int frame)	{
+	color starColor;
+	starColor.randomColor();
+	stars[numStars] = star(
+		starColor,
+		rand() % 120 - 60,
+		rand() % 120 - 60,
+		rand() % 20 + 20);
+	numStars += 1;
+	if (numStars >= maxStars)	{
+		star * oldstars = stars;
+		maxStars += 20;
+		stars = new star[maxStars];
+		for (int i=0; i<numStars; i++)	{
+			stars[i] = oldstars[i];
+		}
+	}
+	glutPostRedisplay();
+	glutTimerFunc(rand() % 800 + 200, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	update(0);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// -------------------------
+// Wonderful square gets bigger and smaller
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "windows.h"
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+GLfloat sideWidth = 0.0;
+GLfloat speed = 0.5;
+
+void init ()
+{
+	glClearColor (0.7, 0.7, 1.0, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	glColor3f (1.0, 1.0, 1.0); // sets Color for drawing operations to white
+	srand(time(0));
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0)	{
+	int angleEach = (360 / sides);
+	GLfloat halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	GLfloat hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			GLfloat deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	perfect(0.0, 0.0, 4, sideWidth);
+  	glutSwapBuffers(); // makes sure commands are executed immediately
+}
+
+void update(int frame)	{
+	sideWidth += speed;
+	if ((sideWidth < 0.005 && speed < 0) || (sideWidth > 199.995 && speed > 0))	speed *= -1;
+	glutPostRedisplay();
+	glutTimerFunc(10, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	update(1);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ---------------------
+// And a snipper for making that a pentagon
+// In display()
+	perfect(0.0, 0.0, 5, sideWidth);
+// And in update()
+	if ((sideWidth < 0.005 && speed < 0) || (-1 * sideWidth / 2.0 / tan(36 / radToDeg) / cos(36 / radToDeg) < -99.995 && speed > 0))	speed *= -1;
+// ------------------
+// Now with brilliant scrolling colors!
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "windows.h"
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+GLfloat sideWidth = 0.0;
+GLfloat speed = 0.5;
+GLfloat radToDeg = (180.0 / M_PI);
+
+color Color(1.0, 1.0, 1.0);
+int sides = 5;
+
+void init ()
+{
+	glClearColor (0.7, 0.7, 1.0, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	srand(time(0));
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0)	{
+	int angleEach = (360 / sides);
+	GLfloat halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / radToDeg);
+	GLfloat hyp = halfHeight / cos(angleEach / 2 / radToDeg);
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			GLfloat deg = (i * angleEach - angleEach / 2 + degOffset) / radToDeg;
+			glVertex3f(X + sin(deg) * hyp, Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f(Color[0], Color[1], Color[2]);
+	perfect(0.0, 0.0, sides, sideWidth);
+  	glutSwapBuffers();
+}
+
+void update(int frame)	{
+	sideWidth += speed;
+	int angleEach = (360 / sides);
+	GLfloat halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / radToDeg);
+	GLfloat hyp = halfHeight / cos(angleEach / 2 / radToDeg);
+	GLfloat deg = (((int)(sides / 2) + 1) * angleEach - angleEach / 2) / radToDeg;
+	if ((sideWidth < 0.005 && speed < 0) || (cos(deg) * hyp < -99.995 && speed > 0))	{
+		if (sideWidth < 0.005 && speed < 0)	{
+			Color.randomColor();
+			sides = rand() % 8 + 3;
+		}
+		speed *= -1;
+	}
+	glutPostRedisplay();
+	glutTimerFunc(1, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	update(1);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ---------------------------
+// And now, starfield! Be careful, intense awesomeness awaits. Also fullscreen
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+color Color(1.0, 1.0, 1.0);
+int colorIndex;
+GLfloat speed;
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0);
+
+class star	{
+public:
+	star()	{
+		X = 0.0;
+		Y = 0.0;
+	}
+	star(GLfloat _X, GLfloat _Y)	{
+		X = _X;
+		Y = _Y;
+	}
+	void Draw()	{
+		glColor3f(Color[0], Color[1], Color[2]);
+		perfect(X, Y, 4, 0.8, 45);
+	}
+	GLfloat X;
+	GLfloat Y;
+};
+
+star * stars = new star[600];
+int numStars = 600;
+
+void init ()
+{
+	glClearColor (0.2, 0.2, 0.35, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	colorIndex = 0;
+	speed = -0.01;
+	srand(time(0));
+	for (int i=0; i<numStars; i++)	{
+		stars[i] = star(rand() % 200 - 100, rand() % 200 - 100);
+	}
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset)	{
+	int angleEach = (360 / sides);
+	GLfloat halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	GLfloat hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			GLfloat deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (Color[0], Color[1], Color[2]); // sets Color for drawing operations to white
+	for (int i=0; i<numStars; i++)	{
+		stars[i].Draw();
+	}
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void update(int frame)	{
+	for (int i=0; i<numStars; i++)	{
+		if (stars[i].X == 0 && stars[i].Y == 0)	{
+			stars[i].X += (rand() % 100 + 1) / 100;
+			stars[i].Y += (rand() % 100 + 1) / 100;
+		}
+		stars[i].X *= 1.05;
+		stars[i].Y *= 1.05;
+		if (stars[i].X > 100 || stars[i].X < -100 || stars[i].Y > 100 || stars[i].Y < -100)
+			stars[i] = star(rand() % 200 - 100, rand() % 200 - 100);
+	}
+	glutPostRedisplay();
+	glutTimerFunc(10, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	update(0);
+	glutFullScreen();
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// -------------------------
+// And now with beautiful spazzy colors! Warning: If you have a history of eppilepsy... : D
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+int colorIndex;
+GLfloat speed;
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0);
+
+class star	{
+public:
+	star()	{
+		X = 0.0;
+		Y = 0.0;
+	}
+	star(GLfloat _X, GLfloat _Y, color _Color)	{
+		X = _X;
+		Y = _Y;
+		Color = _Color;
+	}
+	void Draw()	{
+		glColor3f(Color[0], Color[1], Color[2]);
+		perfect(X, Y, 4, 0.8, 45);
+	}
+	GLfloat X;
+	GLfloat Y;
+	color Color;
+};
+
+star * stars = new star[600];
+int numStars = 600;
+
+void init ()
+{
+	color BG;
+	BG.randomColor();
+	glClearColor (BG[0], BG[1], BG[2], 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	colorIndex = 0;
+	speed = -0.01;
+	srand(time(0));
+	for (int i=0; i<numStars; i++)	{
+		color starColor;
+		starColor.randomColor();
+		stars[i] = star(rand() % 200 - 100, rand() % 200 - 100, starColor);
+	}
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset)	{
+	int angleEach = (360 / sides);
+	GLfloat halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	GLfloat hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			GLfloat deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display ()
+{
+	color BG;
+	BG.randomColor();
+	glClearColor (BG[0], BG[1], BG[2], 0.0); // sets background Color to black
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	for (int i=0; i<numStars; i++)	{
+		stars[i].Draw();
+	}
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void update(int frame)	{
+	for (int i=0; i<numStars; i++)	{
+		if (stars[i].X == 0 && stars[i].Y == 0)	{
+			stars[i].X += (rand() % 100 + 1) / 100;
+			stars[i].Y += (rand() % 100 + 1) / 100;
+		}
+		stars[i].X *= 1.05;
+		stars[i].Y *= 1.05;
+		if (stars[i].X > 100 || stars[i].X < -100 || stars[i].Y > 100 || stars[i].Y < -100)	{
+			color starColor;
+			starColor.randomColor();
+			stars[i] = star(rand() % 200 - 100, rand() % 200 - 100, starColor);
+		}
+	}
+	glutPostRedisplay();
+	glutTimerFunc(10, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	update(0);
+	glutFullScreen();
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// -----------------------------
+// This triangle is very confused...
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+int colorIndex;
+GLfloat speed;
+GLfloat radToDeg = (180.0 / M_PI);
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0);
+
+class triangle	{
+public:
+	triangle()	{
+		X = 0.0;
+		Y = 0.0;
+		Size = 0.0;
+		Color = color();
+	}
+	triangle(GLfloat _X, GLfloat _Y, GLfloat _Size=0.0, int _Offset=0, color _Color=color())	{
+		X = _X;
+		Y = _Y;
+		Size = _Size;
+		Color = _Color;
+		Offset = _Offset;
+	}
+	void Draw()	{
+		glColor3f(Color[0], Color[1], Color[2]);
+		perfect(X, Y, 3, Size, Offset);
+	}
+	GLfloat X;
+	GLfloat Y;
+	GLfloat Size;
+	int Offset;
+	color Color;
+};
+
+triangle Triangle;
+
+void init ()
+{
+	srand(time(0));
+	color BG;
+	BG.randomColor();
+	glClearColor (BG[0], BG[1], BG[2], 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	Triangle = triangle(0.0, 75.0, 40.0);
+	Triangle.Color.randomColor();
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset)	{
+	int angleEach = (360 / sides);
+	GLfloat halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / radToDeg);
+	GLfloat hyp = halfHeight / cos(angleEach / 2 / radToDeg);
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			GLfloat deg = (i * angleEach - angleEach / 2 + degOffset) / radToDeg;
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	Triangle.Draw();
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void update(int frame)	{
+	static int deg = 0;
+	Triangle.Offset -= 1;
+	if (Triangle.Offset < 0)	Triangle.Offset %= 360;
+	if (Triangle.Offset > 360)	Triangle.Offset %= 360;
+	Triangle.X = sin(deg / radToDeg) * 75.0;
+	Triangle.Y = cos(deg / radToDeg) * 75.0;
+	deg += 2;
+	glutPostRedisplay();
+	glutTimerFunc(10, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function above
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	update(0);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// -------------
+// And a useless program that took 50 years.
+#define _USE_MATH_DEFINES
+#include "math.h"
+#include <iostream> // we are looking at the screen output in this program, so we need to see text
+#include <glut.h>
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0)	{
+	int angleEach = (360 / sides);
+	GLfloat halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	GLfloat hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			GLfloat deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+class dot	{
+public:
+	dot()	{
+		X = 0.0;
+		Y = 0.0;
+	}
+	dot(GLfloat _X, GLfloat _Y)	{
+		X = _X;
+		Y = _Y;
+	}
+	void Draw()	{
+		perfect(X, Y, 4, 0.5);
+	}
+	GLfloat X;
+	GLfloat Y;
+};
+
+dot * dots = new dot[100];
+int numDots = 0;
+
+void display () // there is nothing to draw!  we are only concerned with analyzing the input
+{
+	if (numDots >= 80)	{
+		delete[] dots;
+		dots = new dot[100];
+	}
+    glClear(GL_COLOR_BUFFER_BIT); // clear the screen
+	for (int i=0; i<numDots; i++)	dots[i].Draw();
+	glFlush();
+	glutSwapBuffers();
+
+}
+
+
+void init () // our initialization function
+{
+
+    glOrtho (-50, 50, -50, 50, -1, 1); // sets our viewing limits
+    glClearColor (1.0, 1.0, 1.0, 0.0); // set the clear color to white
+    glClear (GL_COLOR_BUFFER_BIT); // clear the screen to start us off
+	glColor3f(0.0, 0.0, 0.0);
+	glMatrixMode(GL_MODELVIEW);
+}
+
+
+void mouse (int button, int state, int x, int y) // this function gets called for mouse input
+{
+	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	x = x * (100.0 / (float)windowWidth) - 50;
+	y = (windowWidth - y) * (100.0 / (float)windowHeight) - 50;
+
+    switch (state) // state can be down/up, depending on whether a button was pressed or released
+    {
+
+    case GLUT_DOWN: // if the button was pressed down
+
+        switch (button) // left, middle, or right, depending on which button is pressed
+		{
+			case GLUT_LEFT_BUTTON: std::cout << "Left Mouse Down at (" << x << ", " << y << ")\n";
+			break;
+			case GLUT_MIDDLE_BUTTON: std::cout << "Middle Mouse Down at (" << x << ", " << y << ")\n";
+			break;
+			case GLUT_RIGHT_BUTTON: std::cout << "Right Mouse Down at (" << x << ", " << y << ")\n";    
+			break;
+        }
+
+        break;
+
+    case GLUT_UP: // if the button was released
+
+        switch (button)
+        {
+			case GLUT_LEFT_BUTTON: std::cout << "Left Mouse Up at (" << x << ", " << y << ")\n";
+			break;
+			case GLUT_MIDDLE_BUTTON: std::cout << "Middle Mouse Up at (" << x << ", " << y << ")\n";
+			break;
+			case GLUT_RIGHT_BUTTON: std::cout << "Right Mouse Up at (" << x << ", " << y << ")\n";    
+			break;
+        }
+
+        break;
+
+    }
+
+	dots[numDots] = dot(x, y);
+	numDots += 1;
+
+    flush (std::cout); // this ensures that all printing commands are executed immediately
+
+    glutPostRedisplay (); // although there is nothing to redraw here, will be important
+
+// in any program you write that will have actual graphics
+
+}
+
+
+void motion (int x, int y) // this is the function that is called when the mouse is moved
+{
+	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	x = x * (100.0 / (float)windowWidth) - 50;
+	y = (windowHeight - y) * (100.0 / (float)windowHeight) - 50;
+    std::cout << "Mouse dragged over (" << x << ", " << y << ")\n";
+	flush (std::cout); // this ensures that all printing commands are executed immediately
+	dots[numDots] = dot(x, y);
+	numDots += 1;
+    glutPostRedisplay (); // redisplay the screen
+
+}
+
+
+void keyboard (unsigned char key, int x, int y) // this function is called for mouse input
+{
+	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	x = x * (100.0 / (float)windowWidth) - 50;
+	y = (windowWidth - y) * (100.0 / (float)windowHeight) - 50;
+    std::cout << "'" << key << "' was pressed when the mouse was at (" << x << ", " << y << ")\n";
+    flush (std::cout); // this ensures that all printing commands are executed immediately
+    glutPostRedisplay (); // redisplay the screen
+
+}
+
+void reshape(int width, int height)	{
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+}
+
+
+int main(int argc, char** argv)
+{
+
+    glutInit (&argc, argv); // calls glutInit to start the program
+    glutInitDisplayMode (GLUT_RGB); // use RGB coloring system
+    glutInitWindowSize (200, 200); // sets the window size to be 100 x 100
+    glutInitWindowPosition (10, 10); // sets the window position
+    glutCreateWindow ("Input"); // creates the window with “Input” as the title
+    init (); // calls our init function
+    glutDisplayFunc (display); // use the function called display for displaying
+    glutMouseFunc (mouse); // use the function called mouse for mouse input
+    glutMotionFunc (motion); // use the function called motion for mouse motion detection
+    glutKeyboardFunc (keyboard); // use the function called keyboard for keyboard input
+	glutReshapeFunc(reshape);
+    glutMainLoop (); // initializes the main loop
+
+    return 0;
+}
+// -------------------------
+// This circle loves your finger.
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0);
+
+void drawCircle(float X, float Y, float Radius, float Precision=1)	{
+	float angleEach = 1;
+	glBegin(GL_POLYGON);
+		for (float i=0; i<(360.0 / angleEach); i+=angleEach)   {
+			float deg = i / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * Radius,
+				Y + cos(deg) * Radius, 0.0);
+		}
+	glEnd();
+}
+
+class circle	{
+public:
+	circle()	{
+		X = 0.0;
+		Y = 0.0;
+		Radius = 0.0;
+	}
+	circle(float _X, float _Y, float _Radius)	{
+		X = _X;
+		Y = _Y;
+		Radius = _Radius;
+	}
+	circle(float _Radius)	{
+		X = 0.0;
+		Y = 0.0;
+		Radius = _Radius;
+	}
+	void Draw()	{
+		drawCircle(X, Y, Radius);
+	}
+	float X;
+	float Y;
+	float Radius;
+};
+
+color Color(1.0, 1.0, 1.0);
+int colorIndex = 0;
+float speed = 0.01;
+circle Circle(20.0);
+
+void init ()
+{
+	glClearColor (0.2, 0.2, 0.35, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	srand(time(0));
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset)	{
+	int angleEach = (360 / sides);
+	float halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	float hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			float deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (Color[0], Color[1], Color[2]); // sets Color for drawing operations to white
+	Circle.Draw();
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void mouse(int state, int button, int x, int y)	{
+	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	float X = x * (200.0 / (float)windowWidth) - 100.0;
+	float Y = (windowWidth - y) * (200.0 / (float)windowHeight) - 100.0;
+	Circle.X = X;
+	Circle.Y = Y;
+}
+
+void mouse(int x, int y)	{
+	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	float X = x * (200.0 / (float)windowWidth) - 100.0;
+	float Y = (windowWidth - y) * (200.0 / (float)windowHeight) - 100.0;
+	Circle.X = X;
+	Circle.Y = Y;
+}
+
+void update(int frame)	{
+	Color.addToColor(speed, colorIndex);
+	if ((Color[colorIndex] < 0.001 && speed < 0) || (Color[colorIndex] > 0.999 && speed > 0))	colorIndex += 1;
+	if (colorIndex > 2)	{
+		colorIndex = 0;
+		speed = -1 * speed;
+	}
+	glutPostRedisplay();
+	glutTimerFunc(2, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function 
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	glutMouseFunc(mouse);
+	glutMotionFunc(mouse);
+	update(0);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ----------------------
+// Now with perfect circle collision testing!
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0);
+
+void drawCircle(float X, float Y, float Radius, float Precision=1)	{
+	float angleEach = 1;
+	glBegin(GL_POLYGON);
+		for (float i=0; i<(360.0 / angleEach); i+=angleEach)   {
+			float deg = i / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * Radius,
+				Y + cos(deg) * Radius, 0.0);
+		}
+	glEnd();
+}
+
+class circle	{
+public:
+	circle()	{
+		X = 0.0;
+		Y = 0.0;
+		Radius = 0.0;
+	}
+	circle(float _X, float _Y, float _Radius)	{
+		X = _X;
+		Y = _Y;
+		Radius = _Radius;
+	}
+	circle(float _Radius)	{
+		X = 0.0;
+		Y = 0.0;
+		Radius = _Radius;
+	}
+	void Draw()	{
+		drawCircle(X, Y, Radius);
+	}
+	bool Collide(float _X, float _Y)	{
+		float xDist = abs(X - _X);
+		float yDist = abs(Y - _Y);
+		float hyp = sqrt(xDist * xDist + yDist * yDist);
+		return hyp < Radius;
+	}
+	float X;
+	float Y;
+	float Radius;
+};
+
+color Color(1.0, 1.0, 1.0);
+int colorIndex = 0;
+float speed = 0.01;
+circle Circle(20.0);
+bool grabbed = false;
+
+void init ()
+{
+	glClearColor (0.2, 0.2, 0.35, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	srand(time(0));
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset)	{
+	int angleEach = (360 / sides);
+	float halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	float hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			float deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (Color[0], Color[1], Color[2]); // sets Color for drawing operations to white
+	Circle.Draw();
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void mouse(int button, int state, int x, int y)	{
+	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	float X = x * (200.0 / (float)windowWidth) - 100.0;
+	float Y = (windowWidth - y) * (200.0 / (float)windowHeight) - 100.0;
+	if (state == GLUT_DOWN)	{
+		if (Circle.Collide(X, Y))	grabbed = true;
+	}
+	else	{
+		grabbed = false;
+	}
+}
+
+void mouseMove(int x, int y)	{
+	if (grabbed)	{
+		int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+		int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+		float X = x * (200.0 / (float)windowWidth) - 100.0;
+		float Y = (windowWidth - y) * (200.0 / (float)windowHeight) - 100.0;
+		Circle.X = X;
+		Circle.Y = Y;
+	}
+}
+
+void update(int frame)	{
+	Color.addToColor(speed, colorIndex);
+	if ((Color[colorIndex] < 0.001 && speed < 0) || (Color[colorIndex] > 0.999 && speed > 0))	colorIndex += 1;
+	if (colorIndex > 2)	{
+		colorIndex = 0;
+		speed = -1 * speed;
+	}
+	glutPostRedisplay();
+	glutTimerFunc(2, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function 
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	glutMouseFunc(mouse);
+	update(0);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ----------------------
+// This square follows the whims of your mouse.
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0);
+
+color Color(1.0, 1.0, 1.0);
+int colorIndex = 0;
+float speed = 0.01;
+float rotSpeed = 0.0;
+float deg = 0.0;
+
+void init ()
+{
+	glClearColor (0.2, 0.2, 0.35, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	srand(time(0));
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset)	{
+	int angleEach = (360 / sides);
+	float halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	float hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			float deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (Color[0], Color[1], Color[2]); // sets Color for drawing operations to white
+	perfect(0.0, 0.0, 4, 50.0, deg);
+  	glFlush (); // makes sure commands are executed immediately
+}
+
+void mouse(int button, int state, int x, int y)	{
+	if (button == GLUT_LEFT)	{
+		if (state == GLUT_DOWN)	{
+			rotSpeed = -1.75;
+		}
+		else	{
+			rotSpeed = 0;
+		}
+	}
+	else	{
+		if (state == GLUT_DOWN)	{
+			rotSpeed = 1.75;
+		}
+		else	{
+			rotSpeed = 0;
+		}
+	}
+}
+
+void update(int frame)	{
+	Color.addToColor(speed, colorIndex);
+	if ((Color[colorIndex] < 0.001 && speed < 0) || (Color[colorIndex] > 0.999 && speed > 0))	colorIndex += 1;
+	if (colorIndex > 2)	{
+		colorIndex = 0;
+		speed = -1 * speed;
+	}
+	deg += rotSpeed;
+	glutPostRedisplay();
+	glutTimerFunc(1, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function 
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	glutMouseFunc(mouse);
+	update(0);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ------------------
+// Here's the drawing program that was assigned... plus dragging.
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0);
+
+class point	{
+public:
+	point()	{
+		X = 0.0;
+		Y = 0.0;
+	}
+	point(float _X, float _Y)	{
+		X = _X;
+		Y = _Y;
+	}
+	float X;
+	float Y;
+};
+
+class pointArray	{
+public:
+	pointArray(int numMaxPoints=2)	{
+		points = new point[numMaxPoints];
+		numPoints = 0;
+		maxPoints = numMaxPoints;
+	}
+	point operator[](int index)	{
+		return getPoint(index);
+	}
+	point getPoint(int index)	{
+		return points[index];
+	}
+	void setPoint(int index, point set)	{
+		points[index] = set;
+	}
+	void addPoint(point add)	{
+		if (numPoints >= maxPoints)		{
+			point * oldpoints = points;
+			maxPoints += 10;
+			points = new point[maxPoints];
+			for (int i=0; i<numPoints; i++)	{
+				points[i] = oldpoints[i];
+			}
+		}
+		points[numPoints] = add;
+		numPoints += 1;
+	}
+	void addPoint(float X, float Y)	{
+		if (numPoints >= maxPoints)		{
+			point * oldpoints = points;
+			maxPoints += 10;
+			points = new point[maxPoints];
+			for (int i=0; i<numPoints; i++)	{
+				points[i] = oldpoints[i];
+			}
+		}
+		points[numPoints] = point(X, Y);
+		numPoints += 1;
+	}
+	void Draw()	{
+		glBegin(GL_LINE_STRIP);
+			for (int i=0; i<numPoints; i++)	{
+				glVertex3f(points[i].X, points[i].Y, 0.0);
+			}
+		glEnd();
+	}
+	point * points;
+	int numPoints;
+	int maxPoints;
+};
+
+color Color(1.0, 1.0, 1.0);
+pointArray points(50);
+int colorIndex = 0;
+float speed = 0.075;
+
+void init ()
+{
+	glClearColor (0.2, 0.2, 0.35, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	srand(time(0));
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset)	{
+	int angleEach = (360 / sides);
+	float halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	float hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			float deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (Color[0], Color[1], Color[2]); // sets Color for drawing operations to white
+	points.Draw();
+  	glutSwapBuffers (); // makes sure commands are executed immediately
+}
+
+void mouse(int button, int state, int x, int y)	{
+	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	float X = x * (200.0 / (float)windowWidth) - 100.0;
+	float Y = (windowWidth - y) * (200.0 / (float)windowHeight) - 100.0;
+	if (state == GLUT_DOWN)	{
+		points.addPoint(X, Y);
+	}
+}
+
+void mouseMove(int x, int y)	{
+	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	float X = x * (200.0 / (float)windowWidth) - 100.0;
+	float Y = (windowWidth - y) * (200.0 / (float)windowHeight) - 100.0;
+	points.addPoint(X, Y);
+}
+
+void update(int frame)	{
+	Color.addToColor(speed, colorIndex);
+	if ((Color[colorIndex] < 0.001 && speed < 0) || (Color[colorIndex] > 0.999 && speed > 0))	colorIndex += 1;
+	if (colorIndex > 2)	{
+		colorIndex = 0;
+		speed = -1 * speed;
+	}
+	glutPostRedisplay();
+	glutTimerFunc(1, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Q"); // sets the window title
+	init (); // calls the init() function 
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	glutMouseFunc(mouse);
+	glutMotionFunc(mouseMove);
+	update(0);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// And now one that's awesome and makes sense!
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0);
+
+class point	{
+public:
+	point()	{
+		X = 0.0;
+		Y = 0.0;
+	}
+	point(float _X, float _Y)	{
+		X = _X;
+		Y = _Y;
+	}
+	float X;
+	float Y;
+};
+
+class line	{
+public:
+	line(int numMaxPoints=2, int numMaxBreaks=3)	{
+		points = new point[numMaxPoints];
+		numPoints = 0;
+		maxPoints = numMaxPoints;
+		breaks = new int[numMaxBreaks];
+		breaks[0] = 0;
+		numBreaks = 1;
+		maxBreaks = numMaxBreaks;
+	}
+	point operator[](int index)	{
+		return getPoint(index);
+	}
+	point getPoint(int index)	{
+		return points[index];
+	}
+	void setPoint(int index, point set)	{
+		points[index] = set;
+	}
+	void addPoint(point add)	{
+		if (numPoints >= maxPoints)		{
+			point * oldpoints = points;
+			maxPoints += 10;
+			points = new point[maxPoints];
+			for (int i=0; i<numPoints; i++)	{
+				points[i] = oldpoints[i];
+			}
+		}
+		points[numPoints] = add;
+		numPoints += 1;
+	}
+	void addPoint(float X, float Y)	{
+		if (numPoints >= maxPoints)		{
+			point * oldpoints = points;
+			maxPoints += 10;
+			points = new point[maxPoints];
+			for (int i=0; i<numPoints; i++)	{
+				points[i] = oldpoints[i];
+			}
+		}
+		points[numPoints] = point(X, Y);
+		numPoints += 1;
+	}
+	void addBreak()	{
+		if (numBreaks >= maxBreaks)		{
+			int * oldbreaks = breaks;
+			maxBreaks += 2;
+			breaks = new int[maxBreaks];
+			for (int i=0; i<numBreaks; i++)	{
+				breaks[i] = oldbreaks[i];
+			}
+		}
+		breaks[numBreaks] = numPoints;
+		numBreaks += 1;
+	}
+	void Draw()	{
+		for (int b=0; b<numBreaks-1; b++)	{
+			glBegin(GL_LINE_STRIP);
+				for (int p=breaks[b]; p<breaks[b+1]; p++)	{
+					glVertex3f(points[p].X, points[p].Y, 0.0);
+				}
+			glEnd();
+		}
+		glBegin(GL_LINE_STRIP);
+			for (int p=breaks[numBreaks - 1]; p<numPoints; p++)	{
+				glVertex3f(points[p].X, points[p].Y, 0.0);
+			}
+		glEnd();
+	}
+	point * points;
+	int numPoints;
+	int maxPoints;
+	int * breaks;
+	int numBreaks;
+	int maxBreaks;
+};
+
+color Color(1.0, 1.0, 1.0);
+line Line(20);
+int colorIndex = 0;
+float speed = 0.025;
+
+void init ()
+{
+	glClearColor (0.2, 0.2, 0.35, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	srand(time(0));
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset)	{
+	int angleEach = (360 / sides);
+	float halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	float hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			float deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (Color[0], Color[1], Color[2]); // sets Color for drawing operations to white
+	Line.Draw();
+  	glutSwapBuffers (); // makes sure commands are executed immediately
+}
+
+void mouse(int button, int state, int x, int y)	{
+	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	float X = x * (200.0 / (float)windowWidth) - 100.0;
+	float Y = (windowHeight - y) * (200.0 / (float)windowHeight) - 100.0;
+	if (state == GLUT_DOWN)	{
+		Line.addPoint(X, Y);
+		Line.addPoint(X+0.5, Y+0.5);
+	}
+	else	{
+		Line.addBreak();
+	}
+}
+
+void mouseMove(int x, int y)	{
+	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	float X = x * (200.0 / (float)windowWidth) - 100.0;
+	float Y = (windowHeight - y) * (200.0 / (float)windowHeight) - 100.0;
+	Line.addPoint(X, Y);
+}
+
+void update(int frame)	{
+	Color.addToColor(speed, colorIndex);
+	if ((Color[colorIndex] < 0.001 && speed < 0) || (Color[colorIndex] > 0.999 && speed > 0))	colorIndex += 1;
+	if (colorIndex > 2)	{
+		colorIndex = 0;
+		speed = -1 * speed;
+	}
+	if (Color.isGrey())	Color.randomColor();
+	glutPostRedisplay();
+	glutTimerFunc(1, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Indidraw!"); // sets the window title
+	init (); // calls the init() function 
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	glutMouseFunc(mouse);
+	glutMotionFunc(mouseMove);
+	update(0);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ---------------------
+// And now typing got 10 timese worse.
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+class key	{
+public:
+	key(unsigned char key=(unsigned char)'|', float x=0.0, float y=0.0)	{
+		X = x;
+		Y = y;
+		Val = key;
+	}
+	void Draw()	{
+		glRasterPos2f(X, Y);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, Val);
+		std::cout << "Drawing..." << std::endl;
+	}
+	float X;
+	float Y;
+	unsigned char Val;
+};
+
+color Color(1.0, 1.0, 1.0);
+int colorIndex = 0;
+float speed = 0.025;
+key * keys = new key[10];
+int numKeys = 0;
+int maxKeys = 10;
+
+void init ()
+{
+	glClearColor (0.2, 0.2, 0.35, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	glLineWidth(15);
+	srand(time(0));
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset)	{
+	int angleEach = (360 / sides);
+	float halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	float hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			float deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void display()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (Color[0], Color[1], Color[2]); // sets Color for drawing operations to white
+	for (int i=0; i<numKeys; i++)	{
+		keys[i].Draw();
+	}
+  	glutSwapBuffers (); // makes sure commands are executed immediately
+}
+
+void keyPress(unsigned char keyVal, int x, int y)	{
+	int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	float X = x * (200.0 / (float)windowWidth) - 100.0;
+	float Y = (windowHeight - y) * (200.0 / (float)windowHeight) - 100.0;
+	if (numKeys >= maxKeys)	{
+		key * oldKeys = keys;
+		maxKeys += 5;
+		keys = new key[maxKeys];
+		for (int i=0; i<numKeys; i++)	{
+			keys[i] = oldKeys[i];
+		}
+		delete[] oldKeys;
+	}
+	keys[numKeys] = key(keyVal, X, Y);
+	numKeys += 1;
+}
+
+void update(int frame)	{
+	Color.addToColor(speed, colorIndex);
+	if ((Color[colorIndex] < 0.001 && speed < 0) || (Color[colorIndex] > 0.999 && speed > 0))	colorIndex += 1;
+	if (colorIndex > 2)	{
+		colorIndex = 0;
+		speed = -1 * speed;
+	}
+	if (Color.isGrey())	Color.randomColor();
+	glutPostRedisplay();
+	glutTimerFunc(10, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Indidraw!"); // sets the window title
+	init (); // calls the init() function 
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	glutKeyboardFunc(keyPress);
+	update(0);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ---------------
+// The greatest triangle ever. And the biggest geometrical bore.
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+color Color(1.0, 1.0, 1.0);
+int colorIndex = 0;
+float speed = 0.025;
+
+void init ()
+{
+	glClearColor (0.2, 0.2, 0.35, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	srand(time(0));
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset)	{
+	int angleEach = (360 / sides);
+	float halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	float hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_LINE_LOOP);
+		for (int i=0; i<sides; i++)   {
+			float deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+void drawFractal(float size=155.0, float x=0.0, float y=0.0, int frame=0)	{
+	perfect(x, y, 3, size, (frame == 0) * 60);
+	if (frame < 6)	{
+		if (frame != 0)	{
+			float newsize = size / 2.0;
+			float height = sqrt(size * size - (newsize * newsize));
+			float topDist = 1.0 / sqrt(3) * size;
+			drawFractal(newsize, x - size / 2.0, y - topDist / 2.0, frame + 1);
+			drawFractal(newsize, x + size / 2.0, y - topDist / 2.0, frame + 1);
+			drawFractal(newsize, x, y + topDist, frame + 1);
+		}
+		else	{
+			drawFractal(size / 2, x, y, frame + 1);
+		}
+	}
+}
+
+void display()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (Color[0], Color[1], Color[2]); // sets Color for drawing operations to white
+	drawFractal();
+  	glutSwapBuffers (); // makes sure commands are executed immediately
+}
+
+void update(int frame)	{
+	Color.addToColor(speed, colorIndex);
+	if ((Color[colorIndex] < 0.001 && speed < 0) || (Color[colorIndex] > 0.999 && speed > 0))	colorIndex += 1;
+	if (colorIndex > 2)	{
+		colorIndex = 0;
+		speed = -1 * speed;
+	}
+	if (Color.isGrey())	Color.randomColor();
+	glutPostRedisplay();
+	glutTimerFunc(10, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Indidraw!"); // sets the window title
+	init (); // calls the init() function 
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	update(0);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// ------------------
+// THE GREATEST MOST AWESOME FRACTAL CREATOR EVER!
+#include <iostream>
+#include <fstream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+#define DEPTH 3
+
+color Color(1.0, 1.0, 1.0);
+int matrix[25];
+
+void init ()
+{
+	glClearColor (0.2, 0.2, 0.35, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	char * line = new char;
+	int i = 0;
+	std::ifstream file("C:/Developing/Q/Q/Matrix.txt");
+	if (file.is_open())	{
+		while (file.good() && i < 25)		{
+			int let = file.get();
+			if (let != '\n' && let != ' ')	{
+				matrix[i] = let - '0';
+				i++;
+			}
+		}
+	}
+	else	{
+		std::cout << "Error opening file." << std::endl;
+	}
+	file.close();
+	srand(time(0));
+	system("start notepad C:/Developing/Q/Q/Matrix.txt");
+}
+
+void perfect(float X, float Y, int sides, float sideWidth, int degOffset=0)	{
+	int angleEach = (360 / sides);
+	float halfHeight = sideWidth / 2.0 / tan(angleEach / 2 / (180.0 / M_PI));
+	float hyp = halfHeight / cos(angleEach / 2 / (180 / M_PI));
+	glBegin(GL_POLYGON);
+		for (int i=0; i<sides; i++)   {
+			float deg = (i * angleEach - angleEach / 2 + degOffset) / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * hyp,
+				Y + cos(deg) * hyp, 0.0);
+		}
+	glEnd();
+}
+
+float xByIndex(int i, float size)	{     return (i % 5) * size ; }
+float yByIndex(int i, float size)	{return -1 * (i / 5  * size);}
+
+void drawFractal(float x=-100.0, float y=100.0, float size=200.0, int frame=0)	{
+	size = size / 5.0;
+	for (int i=0; i<25; i++)	{
+		if (matrix[i])	{
+			if (frame < DEPTH)	{
+				drawFractal(xByIndex(i, size) + x, yByIndex(i, size) + y, size, frame + 1);
+			}
+			else	{
+				perfect(xByIndex(i, size) + size / 2.0 + x, yByIndex(i, size) + size / 2.0 + y, 4, size);
+			}
+		}
+	}
+}
+
+void display()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	glColor3f (Color[0], Color[1], Color[2]); // sets Color for drawing operations to white
+	drawFractal();
+  	glutSwapBuffers (); // makes sure commands are executed immediately
+}
+
+void update()	{
+	char * line = new char;
+	int i = 0;
+	std::ifstream file("C:/Developing/Q/Q/Matrix.txt");
+	if (file.is_open())	{
+		while (file.good() && i < 25)		{
+			int let = file.get();
+			if (let != '\n' && let != ' ')	{
+				matrix[i] = let - '0';
+				i++;
+			}
+		}
+	}
+	else	{
+		std::cout << "Error opening file." << std::endl;
+	}
+	file.close();
+	glutPostRedisplay();
+}
+
+void refresh(unsigned char key, int x, int y)	{
+	if (key == 'r')	{
+		char * line = new char;
+		int i = 0;
+		std::ifstream file("C:/Developing/Q/Q/Matrix.txt");
+		if (file.is_open())	{
+			while (file.good() && i < 25)		{
+				int let = file.get();
+				if (let != '\n' && let != ' ')	{
+					matrix[i] = let - '0';
+					i++;
+				}
+			}
+		}
+		else	{
+			std::cout << "Error opening file." << std::endl;
+		}
+		file.close();
+		glutPostRedisplay();
+	}
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Indidraw!"); // sets the window title
+	init (); // calls the init() function 
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	glutKeyboardFunc(refresh);
+	glutIdleFunc(update);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	glutPostRedisplay();
+	return 0;
+}
+// ------------------
+// Etcha-A-Buggy-Sketch
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+class point	{
+public:
+	point(float _X=0.0, float _Y=0.0, color _Color=color())	{
+		X = _X;
+		Y = _Y;
+		Color = _Color;
+	}
+	float X;
+	float Y;
+	color Color;
+};
+
+class line	{
+public:
+	line(int numMaxPoints=2, int numMaxBreaks=3)	{
+		points = new point[numMaxPoints];
+		numPoints = 0;
+		maxPoints = numMaxPoints;
+		breaks = new int[numMaxBreaks];
+		breaks[0] = 0;
+		numBreaks = 1;
+		maxBreaks = numMaxBreaks;
+	}
+	point operator[](int index)	{
+		return getPoint(index);
+	}
+	point getPoint(int index)	{
+		if (numPoints - 1 < index) return -1;
+		if (index < 0)	index = numPoints + index;
+		return points[index];
+	}
+	void setPoint(int index, point set)	{
+		points[index] = set;
+	}
+	void addPoint(point add)	{
+		if (numPoints >= maxPoints)		{
+			point * oldpoints = points;
+			points = new point[maxPoints];
+			for (int i=0; i<numPoints; i++)	{
+				points[i] = oldpoints[i];
+			}
+		}
+		points[numPoints] = add;
+		numPoints += 1;
+	}
+	void addPoint(float X, float Y, color Color=color())	{
+		if (numPoints >= maxPoints)		{
+			point * oldpoints = points;
+			maxPoints += 10;
+			points = new point[maxPoints];
+			for (int i=0; i<numPoints; i++)	{
+				points[i] = oldpoints[i];
+			}
+		}
+		points[numPoints] = point(X, Y, Color);
+		numPoints += 1;
+	}
+	void addBreak()	{
+		if (numBreaks >= maxBreaks)		{
+			int * oldbreaks = breaks;
+			maxBreaks += 2;
+			breaks = new int[maxBreaks];
+			for (int i=0; i<numBreaks; i++)	{
+				breaks[i] = oldbreaks[i];
+			}
+		}
+		breaks[numBreaks] = numPoints;
+		numBreaks += 1;
+	}
+	void Draw()	{
+		for (int b=0; b<numBreaks-1; b++)	{
+			glBegin(GL_LINE_STRIP);
+				for (int p=breaks[b]; p<breaks[b+1]; p++)	{
+					glColor3f(points[p].Color[0], points[p].Color[1], points[p].Color[2]);
+					glVertex3f(points[p].X, points[p].Y, 0.0);
+				}
+			glEnd();
+		}
+		glBegin(GL_LINE_STRIP);
+			for (int p=breaks[numBreaks - 1]; p<numPoints; p++)	{
+				glColor3f(points[p].Color[0], points[p].Color[1], points[p].Color[2]);
+				glVertex3f(points[p].X, points[p].Y, 0.0);
+			}
+		glEnd();
+	}
+	point * points;
+	int numPoints;
+	int maxPoints;
+	int * breaks;
+	int numBreaks;
+	int maxBreaks;
+};
+
+color Color(1.0, 1.0, 1.0);
+color Colors[9] = {
+	color(1.0, 1.0, 1.0),
+	color(0.0, 0.0, 0.0),
+	color(0.8, 0.0, 0.0),
+	color(0.0, 0.8, 0.0),
+	color(0.0, 0.0, 0.8),
+	color(0.8, 0.8, 0.0),
+	color(0.0, 0.8, 0.8),
+	color(0.8, 0.0, 0.8),
+	color(0.5, 0.5, 0.5)};
+bool scroll = false;
+int colorIndex = 0;
+float speed = 0.025;
+line Line(20);
+unsigned char keys[256];
+
+void init ()
+{
+	glClearColor (0.2, 0.2, 0.35, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (-100.0, 100.0, -100.0, 100.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	Line.addPoint(0.0, 0.0);
+	Line.addBreak();
+	srand(time(0));
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	Line.Draw();
+  	glutSwapBuffers (); // makes sure commands are executed immediately
+}
+
+void press(unsigned char key, int x, int y)	{
+	keys[key] = true;
+	if (key >= '1' && key <= '9')
+		Color = Colors[key - '1'];
+		scroll = false;
+	if (key == '0')
+		scroll = true;
+	if (key == 'e')	{
+		point last = Line.getPoint(-1);
+		Line = line(20);
+		Line.addPoint(last);
+	}
+	if (key == 'r')
+		Color.randomColor();
+	glutPostRedisplay();
+}
+
+void release(unsigned char key, int x, int y)	{
+	keys[key] = false;
+}
+
+void update(int frame)	{
+	if (scroll)	{
+		Color.addToColor(speed, colorIndex);
+		if ((Color[colorIndex] < 0.001 && speed < 0) || (Color[colorIndex] > 0.999 && speed > 0))	colorIndex += 1;
+		if (colorIndex > 2)	{
+			colorIndex = 0;
+			speed = -1 * speed;
+		}
+	}
+	if (keys['w'] || keys['s'] || keys['a'] || keys['d'])	{
+		point lastPoint = Line.getPoint(-1);
+		if (keys['w'])
+			lastPoint.Y += 0.5;
+		if (keys['s'])
+			lastPoint.Y -= 0.5;
+		if (keys['a'])
+			lastPoint.X -= 0.5;
+		if (keys['d'])
+			lastPoint.X += 0.5;
+		Line.addPoint(lastPoint.X, lastPoint.Y, Color);
+		glutPostRedisplay();
+	}
+	glutTimerFunc(1, update, frame + 1);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Indidraw!"); // sets the window title
+	init (); // calls the init() function 
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	glutKeyboardFunc(press);
+	glutKeyboardUpFunc(release);
+	update(0);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
+// --------------
+// Tic-Tac-Toe!
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "glut.h"
+#include "color.h"
+#include <stdlib.h>
+#include "time.h"
+
+void drawCircle(float X, float Y, float Radius, float Precision=1)	{
+	float angleEach = 1;
+	glBegin(GL_LINE_LOOP);
+		for (float i=0; i<(360.0 / angleEach); i+=angleEach)   {
+			float deg = i / (180.0 / M_PI);
+			glVertex3f(X + sin(deg) * Radius,
+				Y + cos(deg) * Radius, 0.0);
+		}
+	glEnd();
+}
+
+enum Piece	{ X, O, Blank };
+
+class board	{
+public:
+	board()	{
+		for (int i=0; i<9; i++)	{
+			spots[i] = Blank;
+		}
+	}
+	void place(int spot, Piece piece)	{
+		spots[spot] = piece;
+	}
+	void place(int x, int y, Piece piece)	{
+		place(y * 3 + x, piece);
+	}
+	Piece get(int spot)	{
+		return spots[spot];
+	}
+	Piece get(int x, int y)	{
+		return get(y * 3 + x);
+	}
+	bool won()	{
+		Piece type;
+		for (int i=0; i<9; i++)	{
+			if (i % 3 == 0)	{
+				type = get(i);
+			}
+			else	{
+				if (get(i) != type)	i += 3 - (i % 3);
+				if (i % 3 == 2)	return true;
+			}
+		}
+	void draw()	{
+		glColor3f(0.6, 0.6, 0.6);
+		glBegin(GL_LINES);
+			glVertex3f(100.0, 0.0  , 0.0);
+			glVertex3f(100.0, 300.0, 0.0);
+			glVertex3f(200.0, 0.0  , 0.0);
+			glVertex3f(200.0, 300.0, 0.0);
+			glVertex3f(0.0  , 100.0, 0.0);
+			glVertex3f(300.0, 100.0, 0.0);
+			glVertex3f(0.0  , 200.0, 0.0);
+			glVertex3f(300.0, 200.0, 0.0);
+		glEnd();
+		glColor3f(1.0, 1.0, 1.0);
+		for (int i=0; i<9; i++)	{
+			if (spots[i] == X)	{
+				glBegin(GL_LINES);
+					glVertex3f((i % 3) * 100.0, i / 3 * 100.0, 0.0);
+					glVertex3f((i % 3) * 100.0 + 100.0, i / 3 * 100.0 + 100.0, 0.0);
+					glVertex3f((i % 3) * 100.0 + 100.0, i / 3 * 100.0, 0.0);
+					glVertex3f((i % 3) * 100.0, i / 3 * 100.0 + 100.0, 0.0);
+				glEnd();
+			}
+			if (spots[i] == O)	{
+				drawCircle((i % 3) * 100.0 + 50.0, i / 3 * 100.0 + 50.0, 48.0);
+			}
+		}
+	}
+	Piece spots[9];
+} Board;
+
+color Color(1.0, 1.0, 1.0);
+int colorIndex = 0;
+float speed = 0.025;
+Piece player = X;
+
+void init ()
+{
+	glClearColor (0.2, 0.2, 0.35, 0.0); // sets background Color to black
+	glMatrixMode (GL_PROJECTION); // sets up viewing values (do not worry about this too much)
+	glLoadIdentity ();
+	glOrtho (0.0, 300.0, 0.0, 300.0, -1.0, 1.0); // sets up “graph paper” for you to draw on
+	srand(time(0));
+}
+
+void display ()
+{
+    glClear (GL_COLOR_BUFFER_BIT); // clears screen
+	Board.draw();
+  	glutSwapBuffers (); // makes sure commands are executed immediately
+}
+
+void reshape(int width, int height)	{
+	glViewport(0, 0, width, height);
+	float widthToHeight = (float)width / (float)height;
+	float winWidth = 300.0 * widthToHeight;
+	float padding = (winWidth - 300.0) / 2.0;
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho (-1 * padding, 300.0 + padding, 0.0, 300.0, -1.0, 1.0);
+	glMatrixMode(GL_MODELVIEW);
+	glutPostRedisplay();
+}
+
+void asdf()	{}
+
+void click(int button, int state, int x, int y)	{
+	if (state == GLUT_DOWN)	{
+		int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+		int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+		float padding = (300.0 * (float)windowWidth / (float)windowHeight - 300.0) / 2.0;
+		float winX = x * ((300.0 + padding * 2) / (float)windowWidth) - padding;
+		float winY = (windowHeight - y - 1) * (300.0 / (float)windowHeight);
+		x = winX / 100.0;
+		y = winY / 100.0;
+		if (Board.get(x, y) == Blank)	{
+			Board.place(x, y, player);
+			if (player == X)
+				player = O;
+			else if (player == O)
+				player = X;
+			glutPostRedisplay();
+		}
+	}
+}
+
+int main(int argc, char** argv)
+{
+	glutInit (&argc, argv); // initialization
+	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB); // certain settings
+	glutInitWindowSize (500, 500); // sets window size in pixels (horizontal and vertical)
+	glutInitWindowPosition (10, 10); // upper left corner position
+	glutCreateWindow ("Tic-Tac-Toe!"); // sets the window title
+	init (); // calls the init() function 
+	glutDisplayFunc (display); // uses the function called “display” for displaying
+	glutMouseFunc(click);
+	glutReshapeFunc(reshape);
+	glutMainLoop (); // will execute OpenGL functions continuously
+	return 0;
+}
